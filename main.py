@@ -6,11 +6,17 @@ from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
+from kivy.uix.popup import Popup
+from utils.data_handler import load_and_plot_histogram
 
 
 class GovernmentsCutCalc(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        parent_layout = BoxLayout(orientation='vertical', size_hint=(None, None), size=(120, 100),
+                          pos_hint={'right': 1, 'top': 1}, spacing=20)
 
         # ** Top-Right Section: Tax Version Selector & Button **
         top_right_layout = BoxLayout(orientation='horizontal', size_hint=(None, None), size=(300, 30),
@@ -23,7 +29,17 @@ class GovernmentsCutCalc(FloatLayout):
                            size_hint=(None, None), size=(120, 30))
         top_right_layout.add_widget(self.version_spinner)
 
-        self.add_widget(top_right_layout)
+        hist_button_layout = BoxLayout(size_hint=(None, None), size=(120, 30), pos_hint={ 'center_x': 0.17})
+
+        self.hist_button = Button(text="Show Histogram", size_hint=(None, None), size=(120, 30))
+        self.hist_button.bind(on_press=self.show_histogram)
+        hist_button_layout.add_widget(self.hist_button)
+
+        # Add both layouts to the parent layout
+        parent_layout.add_widget(top_right_layout)
+        parent_layout.add_widget(hist_button_layout)
+
+        self.add_widget(parent_layout)
 
         self.calculate_button = Button(text="Go", size_hint=(None, None), size=(400, 50),
                            pos_hint={'center_x': 0.5, 'top': 0.5})
@@ -94,6 +110,19 @@ class GovernmentsCutCalc(FloatLayout):
         etf_deduction = 0.08 * 0.60 * gross_salary
         take_home_salary = gross_salary - total_tax - etf_deduction
         return take_home_salary, total_tax, etf_deduction
+    
+    def show_histogram(self, instance):
+        """ Opens a new popup window showing the histogram """
+        plot_path = load_and_plot_histogram()
+
+        if not plot_path:
+            self.result_label.text = "Error loading histogram!"
+            return
+
+        hist_popup = Popup(title="Salary Histogram", size_hint=(0.8, 0.8))
+        hist_image = Image(source=plot_path)
+        hist_popup.add_widget(hist_image)
+        hist_popup.open()
 
 
 class GovernmentsCutApp(App):
