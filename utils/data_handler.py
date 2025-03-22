@@ -29,7 +29,7 @@ def _prepare_data(df):
     df = pd.concat([pd.DataFrame([sl_rate]), df ], ignore_index=True)
     return df
 
-def load_and_plot_histogram(xl_file="data/new_dataset/oecd_inctax_1.xlsx"):
+def load_and_plot_histogram(xl_file="data/global_tax_rates/oecd_inctax_1.xlsx"):
     """
     Reads the CSV file, creates a histogram of salaries, and saves the plot as an image.
     """
