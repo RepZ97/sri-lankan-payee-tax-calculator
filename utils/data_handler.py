@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import tempfile
 import os
 
 
@@ -72,8 +73,8 @@ def load_and_plot_histogram(xl_file="data/global_tax_rates/oecd_inctax_1.xlsx"):
     plt.grid(axis="y", linestyle="--", alpha=0.7)
 
     # save plot on resources
-    plot_path = "resources/histogram.png"
-    plt.savefig(plot_path)
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+    plt.savefig(temp_file)
     plt.close()
 
-    return plot_path
+    return temp_file.name

@@ -9,7 +9,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from utils.data_handler import load_and_plot_histogram
-
+import os
 
 class GovernmentsCutCalc(FloatLayout):
     def __init__(self, **kwargs):
@@ -208,6 +208,12 @@ class GovernmentsCutCalc(FloatLayout):
         hist_popup = Popup(title="Global Tax Rates", size_hint=(0.8, 0.8))
         hist_image = Image(source=plot_path)
         hist_popup.add_widget(hist_image)
+
+        def on_dismiss(*args):
+            if os.path.exists(plot_path):
+                os.remove(plot_path)
+
+        hist_popup.bind(on_dismiss=on_dismiss)
         hist_popup.open()
 
 
