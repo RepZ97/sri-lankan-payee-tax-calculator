@@ -31,7 +31,7 @@ class GovernmentsCutCalc(FloatLayout):
 
         hist_button_layout = BoxLayout(size_hint=(None, None), size=(120, 30), pos_hint={ 'center_x': 0.17})
 
-        self.hist_button = Button(text="Show Histogram", size_hint=(None, None), size=(120, 30))
+        self.hist_button = Button(text="Global Rates", size_hint=(None, None), size=(120, 30))
         self.hist_button.bind(on_press=self.show_histogram)
         hist_button_layout.add_widget(self.hist_button)
 
